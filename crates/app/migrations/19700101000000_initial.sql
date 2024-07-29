@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS greetings (
+    id         BIGINT GENERATED ALWAYS AS IDENTITY,
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL,
+    greeting   VARCHAR(64)
+);
