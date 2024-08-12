@@ -4,5 +4,6 @@ members = [
     "crates/app",
     "crates/domain",
     "crates/filesystem",
-    "crates/settings"
+    "crates/settings",
+    "crates/web"
 ]
