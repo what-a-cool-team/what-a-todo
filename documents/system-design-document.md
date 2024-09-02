@@ -229,7 +229,7 @@ PUT /api/tasks/{task_id}:
               description: The updated description of the task
             status:
               type: string
-              description: The updated status of the task (e.g., 'Created', 'Committed', 'In Progress', 'Completed')
+              description: The updated status of the task (e.g., 'Created', 'In Progress', 'Completed')
             tags:
               type: array
               description: A list of tag IDs to associate with the task (add or remove tags)
