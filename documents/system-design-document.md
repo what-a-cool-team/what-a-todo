@@ -14,15 +14,13 @@
 | P0 | Users are able create new tasks with a name, and optionally add description and tags |
 | P0 | Users are able to update existing tasks to change details such as name, description, status, and tags|
 | P1 | Users are able to view a list of all their tasks |
-| P2 | Users are able to delete tasks they no longer need |
+| P1 | Users are able to delete tasks they no longer need |
 | P2 | Users are able to search tasks by name or tags |
 | P2 | Users are able to filter tasks by status |
 
 ## 3. Operational requirements
   * **Security**: 
     * The system should grant users access only to the tasks that they own.
-    * The system should allow users to log in and out using their registered ID and password.
-    * The system should allow users to delete their accounts.
     * Administrators should be restricted from accessing user passwords.
     
 ## 4. Domain Model Design
@@ -33,7 +31,7 @@
 |User|
 |Task|
 |Tag|
-|Status| "Created", "Committed", "In Progress", "Completed" |
+|Status| "Created", "In Progress", "Completed" |
 
 
 ### 4.2 Attributes
@@ -59,16 +57,15 @@
  
 ```sql
 CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  account_id VARCHAR(64) NOT NULL
+  id VARCHAR(64) NOT NULL
 );
 
 CREATE TABLE tasks (
   id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
+  user_id VARCHAR(64) NOT NULL,
   name VARCHAR(128) NOT NULL,
   description VARCHAR(128),
-  status VARCHAR(20) NOT NULL CHECK (status IN ('Created', 'Committed', 'In Progress', 'Completed')),
+  status VARCHAR(20) NOT NULL CHECK (status IN ('Created', 'In Progress', 'Completed')),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -90,7 +87,7 @@ CREATE TABLE tasks_tags (
 
 ## 6. API Document
 ```yaml
-POST /api/users/:
+POST /api/users:
   summary: Creates a new user
   requestBody:
     content:
@@ -110,14 +107,6 @@ POST /api/users/:
   responses:
     '201':
       description: User account successfully created
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                example: true
     '400':
       description: Bad Request - Invalid input
     '409':
@@ -130,7 +119,7 @@ DELETE /api/users/{user_id}:
       in: path
       required: true
       schema:
-        type: integer
+        type: string
       description: The unique identifier of the user to delete
   responses:
     '204':
@@ -175,7 +164,7 @@ POST /api/tasks:
     '400':
       description: Bad Request - Invalid input
 
-GET /api/tasks/:
+GET /api/tasks:
   summary: Returns a list of all tasks for the current user, optionally filtered by name, tag, or status
   parameters:
     - name: name
@@ -324,7 +313,7 @@ DELETE /api/tasks/{task_id}:
     '400':
       description: Bad request, possibly due to an invalid task ID
 
-POST /api/tags/:
+POST /api/tags:
   summary: Creates a new tag
   requestBody:
     content:
@@ -353,7 +342,7 @@ POST /api/tags/:
     '409':
       description: Conflict - Tag name already exists
 
-GET /api/tags/:
+GET /api/tags:
   summary: Retrieves a list of all tags
   responses:
     '200':
