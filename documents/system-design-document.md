@@ -156,23 +156,13 @@ POST /api/tasks:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              id:
-                type: integer
-                description: The unique identifier of the newly created task
+            type: task
     '400':
       description: Bad Request - Invalid input
 
 GET /api/tasks:
   summary: Returns a list of all tasks for the current user, optionally filtered by name, tag, or status
   parameters:
-    - name: name
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter tasks by name
     - name: tag
       in: query
       required: false
@@ -193,23 +183,7 @@ GET /api/tasks:
           schema: 
             type: array
             items:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  description: Unique identifier for the task
-                name:
-                  type: string
-                  description: Name of the task
-                description:
-                  type: string
-                  description: Detailed description of the task
-                status:
-                  type: string
-                  description: Current status of the task (e.g., 'Created', 'Committed', 'In Progress', 'Completed')
-                user_id:
-                  type: integer
-                  description: ID of the user who owns the task
+              type: task
 
 GET /api/tasks/{task_id}:
   summary: Retrieves a specific task by its ID
@@ -226,23 +200,7 @@ GET /api/tasks/{task_id}:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              id:
-                type: integer
-                description: The unique identifier of the task
-              name:
-                type: string
-                description: The name of the task
-              description:
-                type: string
-                description: Detailed description of the task
-              status:
-                type: string
-                description: Current status of the task (e.g., 'Created', 'Committed', 'In Progress', 'Completed')
-              user_id:
-                type: integer
-                description: ID of the user who owns the task
+            type: task
     '404':
       description: Task not found
     '400':
@@ -284,11 +242,7 @@ PUT /api/tasks/{task_id}:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                example: true
+            type: task
     '204':
       description: No Content - No changes made to the task
     '404':
@@ -332,11 +286,7 @@ POST /api/tags:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              id:
-                type: integer
-                description: The unique identifier of the newly created tag
+            type: tag
     '400':
       description: Bad Request - Invalid input
     '409':
@@ -352,14 +302,7 @@ GET /api/tags:
           schema:
             type: array
             items:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  description: The unique identifier of the tag
-                name:
-                  type: string
-                  description: The name of the tag
+              type: tag
     '400':
       description: Bad request
 
@@ -378,11 +321,7 @@ GET /api/tags/{tag_id}:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
-                description: The name of the tag
+            type: tag
     '404':
       description: Tag not found
     '400':
@@ -414,11 +353,7 @@ PUT /api/tags/{tag_id}:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                example: true
+            type: tag
     '404':
       description: Tag not found
     '400':
