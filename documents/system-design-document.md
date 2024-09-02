@@ -102,25 +102,26 @@ POST /api/users:
               type: string
               description: The password for the new user
           required:
-            - account ID
-            - password
+          - id
+          - password
   responses:
     '201':
       description: User account successfully created
     '400':
       description: Bad Request - Invalid input
     '409':
-      description: Conflict - Email already exists
+      description: Conflict - user ID already exists
+
 
 DELETE /api/users/{user_id}:
   summary: Deletes a specific user by their ID and all associated tasks
   parameters:
-    - name: user_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The unique identifier of the user to delete
+  - name: user_id
+    in: path
+    required: true
+    schema:
+      type: string
+    description: The unique identifier of the user to delete
   responses:
     '204':
       description: No Content - User and associated tasks successfully deleted
@@ -129,8 +130,10 @@ DELETE /api/users/{user_id}:
     '400':
       description: Bad request, possibly due to an invalid user ID
 
+
 POST /api/tasks:
-  summary: Creates a new task for the current user, optionally associating it with description and tags
+  summary: Creates a new task for the current user, optionally associating it with
+    description and tags
   requestBody:
     content:
       application/json:
@@ -149,72 +152,77 @@ POST /api/tasks:
               items:
                 type: integer
           required:
-            - name
+          - name
   responses:
     '201':
       description: Task successfully created
       content:
         application/json:
           schema:
-            type: task
+            $ref: '#/components/schemas/task'
     '400':
       description: Bad Request - Invalid input
 
+
 GET /api/tasks:
-  summary: Returns a list of all tasks for the current user, optionally filtered by name, tag, or status
+  summary: Returns a list of all tasks for the current user, optionally filtered by
+    name, tag, or status
   parameters:
-    - name: tag
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter tasks by tag name
-    - name: status
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter tasks by status
+  - name: tag
+    in: query
+    required: false
+    schema:
+      type: string
+    description: Filter tasks by tag name
+  - name: status
+    in: query
+    required: false
+    schema:
+      type: string
+    description: Filter tasks by status
   responses:
     '200':
-      description: A JSON array of tasks matching the criteria or all tasks if no parameters are provided
+      description: A JSON array of tasks matching the criteria or all tasks if no
+        parameters are provided
       content:
         application/json:
-          schema: 
+          schema:
             type: array
             items:
-              type: task
+              $ref: '#/components/schemas/task'
+
 
 GET /api/tasks/{task_id}:
   summary: Retrieves a specific task by its ID
   parameters:
-    - name: task_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The unique identifier of the task to retrieve
+  - name: task_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The unique identifier of the task to retrieve
   responses:
     '200':
       description: Task details successfully retrieved
       content:
         application/json:
           schema:
-            type: task
+            $ref: '#/components/schemas/task'
     '404':
       description: Task not found
     '400':
       description: Bad request, possibly due to an invalid task ID
 
+
 PUT /api/tasks/{task_id}:
   summary: Updates an existing task by its ID, allowing modifications to the name, status, description, or tags
   parameters:
-    - name: task_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The unique identifier of the task to update
+  - name: task_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The unique identifier of the task to update
   requestBody:
     content:
       application/json:
@@ -232,7 +240,8 @@ PUT /api/tasks/{task_id}:
               description: The updated status of the task (e.g., 'Created', 'In Progress', 'Completed')
             tags:
               type: array
-              description: A list of tag IDs to associate with the task (add or remove tags)
+              description: A list of tag IDs to associate with the task (add or remove
+                tags)
               items:
                 type: integer
           additionalProperties: false
@@ -242,7 +251,7 @@ PUT /api/tasks/{task_id}:
       content:
         application/json:
           schema:
-            type: task
+            $ref: '#/components/schemas/task'
     '204':
       description: No Content - No changes made to the task
     '404':
@@ -250,15 +259,16 @@ PUT /api/tasks/{task_id}:
     '400':
       description: Bad request, possibly due to invalid input data or task ID
 
+
 DELETE /api/tasks/{task_id}:
   summary: Deletes a specific task by its ID
   parameters:
-    - name: task_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The unique identifier of the task to delete
+  - name: task_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The unique identifier of the task to delete
   responses:
     '204':
       description: No Content - Task successfully deleted
@@ -266,6 +276,7 @@ DELETE /api/tasks/{task_id}:
       description: Task not found
     '400':
       description: Bad request, possibly due to an invalid task ID
+
 
 POST /api/tags:
   summary: Creates a new tag
@@ -279,18 +290,19 @@ POST /api/tags:
               type: string
               description: The name of the new tag
           required:
-            - name
+          - name
   responses:
     '201':
       description: Tag successfully created
       content:
         application/json:
           schema:
-            type: tag
+            $ref: '#/components/schemas/tag'
     '400':
       description: Bad Request - Invalid input
     '409':
       description: Conflict - Tag name already exists
+
 
 GET /api/tags:
   summary: Retrieves a list of all tags
@@ -302,40 +314,42 @@ GET /api/tags:
           schema:
             type: array
             items:
-              type: tag
+              $ref: '#/components/schemas/tag'
     '400':
       description: Bad request
+
 
 GET /api/tags/{tag_id}:
   summary: Retrieves a specific tag by its ID
   parameters:
-    - name: tag_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The unique identifier of the tag to retrieve
+  - name: tag_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The unique identifier of the tag to retrieve
   responses:
     '200':
       description: Tag details successfully retrieved
       content:
         application/json:
           schema:
-            type: tag
+            $ref: '#/components/schemas/tag'
     '404':
       description: Tag not found
     '400':
       description: Bad request, possibly due to an invalid tag ID
 
+
 PUT /api/tags/{tag_id}:
   summary: Updates the name of an existing tag by its ID
   parameters:
-    - name: tag_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The unique identifier of the tag to update
+  - name: tag_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The unique identifier of the tag to update
   requestBody:
     content:
       application/json:
@@ -346,28 +360,29 @@ PUT /api/tags/{tag_id}:
               type: string
               description: The updated name of the tag
           required:
-            - name
+          - name
   responses:
     '200':
       description: Tag successfully updated
       content:
         application/json:
           schema:
-            type: tag
+            $ref: '#/components/schemas/tag'
     '404':
       description: Tag not found
     '400':
       description: Bad request, possibly due to invalid input data or tag ID
 
+
 DELETE /api/tags/{tag_id}:
   summary: Deletes a specific tag by its ID
   parameters:
-    - name: tag_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The unique identifier of the tag to delete
+  - name: tag_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The unique identifier of the tag to delete
   responses:
     '204':
       description: No Content - Tag successfully deleted
@@ -375,5 +390,52 @@ DELETE /api/tags/{tag_id}:
       description: Tag not found
     '400':
       description: Bad request, possibly due to an invalid tag ID
+
+components:
+  ##############################
+  # Application Schema Objects #
+  ##############################
+  schemas:
+
+
+    task:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the task
+        name:
+          type: string
+          description: The name of the task
+        description:
+          type: string
+          description: A detailed description of the task
+        status:
+          type: string
+          description: The current status of the task
+        tags:
+          type: array
+          items:
+            type: integer
+          description: A list of tag IDs associated with the task
+      required:
+      - id
+      - name
+      - status
+
+
+    tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the tag
+        name:
+          type: string
+          description: The name of the tag
+      required:
+      - id
+      - name
+
 
 ```
