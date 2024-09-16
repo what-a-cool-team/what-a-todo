@@ -1,0 +1,8 @@
+FROM rust:slim-bookworm
+RUN rustup target add wasm32-unknown-unknown
+RUN cargo install --locked trunk
+
+WORKDIR /usr/src/app
+COPY . .
+
+ENTRYPOINT ["trunk", "serve", "--config", "./trunk.toml"]

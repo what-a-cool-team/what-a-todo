@@ -1,12 +1,13 @@
 [build]
 target = "crates/web/index.html"
 release = false
-dist = "target/web"
+dist = "crates/web/dst"
 public_url = "/"
 
 [serve]
+addresses = ["0.0.0.0"]
 port = 3000
 
 [clean]
-dist = "target/web"
+dist = "crates/web/dst"
 cargo = false
