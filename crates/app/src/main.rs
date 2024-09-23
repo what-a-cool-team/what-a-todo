@@ -7,6 +7,7 @@ use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
 use api::routers::Api;
+use domain::repositories::task_repository::{DomainTaskRepository, TaskRepository};
 use domain::services::service_registry::ServiceRegistry;
 use settings::settings::Settings;
 use filesystem::{FileSource, LocalFileSystem};
@@ -44,7 +45,7 @@ async fn main() -> anyhow::Result<()> {
             .context("Error while running database migrations")?
     }
 
-    let service_registry = ServiceRegistry::new(pool);
+    let service_registry = ServiceRegistry::new(pool.clone());
 
     info!("Starting server on {}...", settings.server.port);
     let listener = TcpListener::bind(&format!("0.0.0.0:{}", settings.server.port))
@@ -53,6 +54,9 @@ async fn main() -> anyhow::Result<()> {
     axum::serve(listener, Api::new(service_registry.clone()))
         .await
         .unwrap();
+
+    let task_repo = DomainTaskRepository::new(pool.clone());
+    // let tasks = task_repo.get_tasks().await?;
 
     Ok(())
 }
