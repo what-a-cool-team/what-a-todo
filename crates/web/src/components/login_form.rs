@@ -1,11 +1,45 @@
 use yew::prelude::*;
 use log::info;
+use web_sys::HtmlInputElement;
 
 #[function_component(LoginForm)]
 pub fn login_form() -> Html {
-    let onsubmit = Callback::from(move |_: SubmitEvent| {
-        info!("On Submit!");
-    });
+    let username = use_state(String::new);
+    let password = use_state(String::new);
+
+    let on_username_input = {
+        let username = username.clone();
+
+        Callback::from(move |e: InputEvent| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            username.set(input.value());
+        })
+    };
+
+    let on_password_input = {
+        let password = password.clone();
+
+        Callback::from(move |e: InputEvent| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            password.set(input.value());
+        })
+    };
+
+    let onsubmit = {
+        let username = username.clone();
+        let password = password.clone();
+
+        Callback::from(move |e: SubmitEvent| {
+            e.prevent_default();
+            let username = (*username).clone();
+            let password = (*password).clone();
+
+            info!("Username: {}", username);
+            info!("Password: {}", password);
+
+            //TODO: make a login API call to get a token.
+        })
+    };
 
     html! {
         <section>
@@ -21,8 +55,22 @@ pub fn login_form() -> Html {
                       </svg>
                     </center>
                     <form {onsubmit}>
-                      <input type="text" id="username" class="form-control my-4 py-2" placeholder="Username" />
-                      <input type="text" id="password" class="form-control my-4 py-2" placeholder="Password" />
+                      <input
+                        type="text"
+                        id="username"
+                        class="form-control my-4 py-2"
+                        placeholder="Username"
+                        value={(*username).clone()}
+                        oninput={on_username_input}
+                      />
+                      <input
+                        type="text"
+                        id="password"
+                        class="form-control my-4 py-2"
+                        placeholder="Password"
+                        value={(*password).clone()}
+                        oninput={on_password_input}
+                      />
                       <div class="text-center mt-3">
                         <button type="submit" class="btn btn-primary">{"Login"}</button>
                         <a href="#" class="nav-link">{"Forgot password?"}</a>
