@@ -1,6 +1,15 @@
 services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: web
+    ports:
+      - "3000:3000"
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.app
     container_name: app
     ports:
       - "8080:8080"
