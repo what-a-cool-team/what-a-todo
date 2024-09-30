@@ -4,6 +4,7 @@ use sqlx::FromRow;
 use super::status::Status;
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
+#[serde(rename_all = "camelCase")]
 pub struct Task {
     pub id: i32,
     pub user_id: i32,
