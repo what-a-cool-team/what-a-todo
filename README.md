@@ -1,6 +1,6 @@
 # what-a-template
 
-Rust web app template
+Rust web app template.
 
 ## Table of Contents
 
