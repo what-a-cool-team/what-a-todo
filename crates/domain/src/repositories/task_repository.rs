@@ -60,7 +60,7 @@ impl TaskRepository for DomainTaskRepository {
     }
 
     async fn create_task(&self, task: Task) -> anyhow::Result<Task> {
-        let now = Utc::now().naive_utc();
+        let now = Utc::now();
 
         let name = task.name.clone();
         let description = task.description.clone();

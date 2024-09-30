@@ -1,4 +1,4 @@
-use chrono::{NaiveDateTime, Utc};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use super::status::Status;
@@ -11,8 +11,8 @@ pub struct Task {
     pub description: Option<String>,
     pub status: Status,
     pub tags: Option<Vec<String>>,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl Task {
@@ -24,8 +24,8 @@ impl Task {
             description,
             status,
             tags,
-            created_at: Utc::now().naive_utc(),
-            updated_at: Utc::now().naive_utc(),
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
         }
     }
 }
