@@ -2,13 +2,13 @@ use config::{Config, ConfigError};
 use serde::Deserialize;
 use filesystem::{FileSource};
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 #[allow(unused)]
 pub struct Server {
     pub port: u32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 #[allow(unused)]
 pub struct Database {
     pub connection_url: String,
@@ -16,11 +16,18 @@ pub struct Database {
     pub migrate_on_startup: bool,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
+#[allow(unused)]
+pub struct Auth {
+    pub jwk: String,
+}
+
+#[derive(Clone, Debug, Deserialize)]
 #[allow(unused)]
 pub struct Settings {
     pub server: Server,
     pub database: Database,
+    pub auth: Auth,
 }
 
 impl Settings {

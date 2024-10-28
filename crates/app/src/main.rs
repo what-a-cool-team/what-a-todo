@@ -44,7 +44,7 @@ async fn main() -> anyhow::Result<()> {
             .context("Error while running database migrations")?
     }
 
-    let service_registry = ServiceRegistry::new(pool);
+    let service_registry = ServiceRegistry::new(pool, settings.clone());
 
     info!("Starting server on {}...", settings.server.port);
     let listener = TcpListener::bind(&format!("0.0.0.0:{}", settings.server.port))
