@@ -2,13 +2,13 @@ use config::{Config, ConfigError};
 use serde::Deserialize;
 use filesystem::{FileSource};
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 #[allow(unused)]
 pub struct Server {
     pub port: u32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 #[allow(unused)]
 pub struct Database {
     pub connection_url: String,
@@ -16,11 +16,18 @@ pub struct Database {
     pub migrate_on_startup: bool,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
+#[allow(unused)]
+pub struct Auth {
+    pub jwk: String,
+}
+
+#[derive(Clone, Debug, Deserialize)]
 #[allow(unused)]
 pub struct Settings {
     pub server: Server,
     pub database: Database,
+    pub auth: Auth,
 }
 
 impl Settings {
@@ -58,6 +65,9 @@ mod tests {
         connection_url = "postgres://user:password@localhost/db"
         max_connections = 5
         migrate_on_startup = true
+
+        [auth]
+        jwk = "test-key"
         "#;
 
         let file_source = FileSource::new(String::from(config_content));
