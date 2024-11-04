@@ -65,6 +65,9 @@ mod tests {
         connection_url = "postgres://user:password@localhost/db"
         max_connections = 5
         migrate_on_startup = true
+
+        [auth]
+        jwk = "test-key"
         "#;
 
         let file_source = FileSource::new(String::from(config_content));
