@@ -1,9 +1,9 @@
-use std::collections::HashMap;
-use std::io::{Cursor};
-use std::pin::Pin;
-use async_trait::async_trait;
-use tokio::io::AsyncRead;
 use crate::FileSystem;
+use async_trait::async_trait;
+use std::collections::HashMap;
+use std::io::Cursor;
+use std::pin::Pin;
+use tokio::io::AsyncRead;
 
 #[derive(Clone)]
 pub struct InMemoryFileSystem {

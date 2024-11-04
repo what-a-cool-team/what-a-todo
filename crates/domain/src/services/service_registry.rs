@@ -25,6 +25,9 @@ impl ServiceRegistry {
         let task_service =
             Arc::new(DomainTaskService::new(task_repository.clone())) as DynTaskService;
 
-        ServiceRegistry { greeting_service, task_service }
+        ServiceRegistry {
+            greeting_service,
+            task_service,
+        }
     }
 }
