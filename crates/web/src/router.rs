@@ -1,8 +1,8 @@
-use yew::prelude::*;
-use yew_router::prelude::*;
 use crate::pages::home::Home;
 use crate::pages::login::Login;
 use crate::pages::signup::SignUp;
+use yew::prelude::*;
+use yew_router::prelude::*;
 
 #[derive(Clone, Routable, PartialEq)]
 pub enum Route {
@@ -24,6 +24,6 @@ pub fn switch(routes: Route) -> Html {
         },
         Route::Login => html! {
             <Login />
-        }
+        },
     }
 }

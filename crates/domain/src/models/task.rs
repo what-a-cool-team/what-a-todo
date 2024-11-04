@@ -1,13 +1,13 @@
+use super::status::Status;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
-use super::status::Status;
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Task {
-    pub id: i32,
-    pub user_id: i32,
+    pub id: i64,
+    pub user_id: i64,
     pub name: String,
     pub description: Option<String>,
     pub status: Status,
@@ -17,7 +17,13 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn new(user_id: i32, name: String, description: Option<String>, status: Status, tags: Option<Vec<String>>) -> Self {
+    pub fn new(
+        user_id: i64,
+        name: String,
+        description: Option<String>,
+        status: Status,
+        tags: Option<Vec<String>>,
+    ) -> Self {
         Task {
             id: 0, // auto-generated
             user_id,

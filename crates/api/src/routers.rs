@@ -1,8 +1,8 @@
 use std::time::Duration;
 
-use axum::{BoxError, Json, Router};
 use axum::error_handling::HandleErrorLayer;
 use axum::http::{HeaderValue, Method, StatusCode};
+use axum::{BoxError, Json, Router};
 use serde_json::json;
 use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
@@ -11,6 +11,7 @@ use tower_http::trace::TraceLayer;
 use domain::services::service_registry::ServiceRegistry;
 
 use crate::controllers::greetings::GreetingsController;
+use crate::controllers::tasks::TasksController;
 
 static HTTP_TIMEOUT: u64 = 30;
 
@@ -22,6 +23,10 @@ impl Api {
             .nest(
                 "/api/v1/greetings",
                 GreetingsController::new_router(service_registry.clone()),
+            )
+            .nest(
+                "/api/v1/tasks",
+                TasksController::new_router(service_registry.clone()),
             )
             .layer(
                 ServiceBuilder::new()
