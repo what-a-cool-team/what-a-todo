@@ -8,8 +8,8 @@ use tracing_subscriber::util::SubscriberInitExt;
 
 use api::routers::Api;
 use domain::services::service_registry::ServiceRegistry;
-use settings::settings::Settings;
 use filesystem::{FileSource, LocalFileSystem};
+use settings::settings::Settings;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

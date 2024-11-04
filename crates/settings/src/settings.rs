@@ -1,6 +1,6 @@
 use config::{Config, ConfigError};
+use filesystem::FileSource;
 use serde::Deserialize;
-use filesystem::{FileSource};
 
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
@@ -26,7 +26,10 @@ pub struct Settings {
 impl Settings {
     pub fn from(file_source: &FileSource) -> Result<Self, ConfigError> {
         let s = Config::builder()
-            .add_source(config::File::from_str(&file_source.content, config::FileFormat::Toml))
+            .add_source(config::File::from_str(
+                &file_source.content,
+                config::FileFormat::Toml,
+            ))
             .add_source(
                 config::Environment::with_prefix("APP")
                     .try_parsing(true)
@@ -42,7 +45,7 @@ impl Settings {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use filesystem::{InMemoryFileSystem};
+    use filesystem::InMemoryFileSystem;
 
     #[test]
     fn test_settings_from() {
@@ -67,7 +70,10 @@ mod tests {
         match settings_result {
             Ok(settings) => {
                 assert_eq!(settings.server.port, 8080);
-                assert_eq!(settings.database.connection_url, "postgres://user:password@localhost/db");
+                assert_eq!(
+                    settings.database.connection_url,
+                    "postgres://user:password@localhost/db"
+                );
                 assert_eq!(settings.database.max_connections, 5);
                 assert!(settings.database.migrate_on_startup);
             }

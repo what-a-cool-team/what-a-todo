@@ -1,6 +1,6 @@
-use yew::prelude::*;
 use log::info;
 use web_sys::HtmlInputElement;
+use yew::prelude::*;
 
 #[function_component(LoginForm)]
 pub fn login_form() -> Html {
