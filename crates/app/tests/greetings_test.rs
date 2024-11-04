@@ -122,7 +122,7 @@ async fn new_api_context() -> ApiContext {
         },
         auth: settings::settings::Auth { jwk: "test-key".to_string() },
     };
-    
+
     ApiContext {
         container: node,
         api: Api::new(ServiceRegistry::new(pool, settings.clone())),

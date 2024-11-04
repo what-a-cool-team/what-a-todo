@@ -51,7 +51,7 @@ impl UserRepository for DomainUserRepository {
         .bind(id)
         .fetch_one(&self.pool)
         .await?;
-        
+
         let user = User {
             id: row.get("id"),
             password_hash: row.get("password_hash"),
@@ -66,7 +66,7 @@ impl UserRepository for DomainUserRepository {
 
             let decoded_key = base64::decode(&self.auth.jwk)
                 .map_err(|e| anyhow::anyhow!("Failed to decode JWK from base64: {}", e))?;
-    
+
             let key: Hmac<Sha256> = Hmac::new_from_slice(&decoded_key)?;
 
             let claims = Claims {
