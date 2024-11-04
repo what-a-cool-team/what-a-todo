@@ -64,7 +64,7 @@ pub fn login_form() -> Html {
                         oninput={on_username_input}
                       />
                       <input
-                        type="text"
+                        type="password"
                         id="password"
                         class="form-control my-4 py-2"
                         placeholder="Password"
@@ -73,7 +73,12 @@ pub fn login_form() -> Html {
                       />
                       <div class="text-center mt-3">
                         <button type="submit" class="btn btn-primary">{"Login"}</button>
-                        <a href="#" class="nav-link">{"Forgot password?"}</a>
+                      </div>
+                      <div class="text-center mt-3">
+                        <a href="#" class="nav-link p-0 d-inline-block">{"Forgot password?"}</a>
+                      </div>
+                      <div class="text-center mt-3">
+                        <a href="#" class="nav-link p-0 d-inline-block">{"Not a user?"}</a>
                       </div>
                     </form>
                   </div>
