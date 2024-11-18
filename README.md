@@ -55,7 +55,7 @@ development process.
 #### Database creation
 
 ``` bash
-createdb dbname
+createdb todo_app
 ```
 
 #### Trunk install 
