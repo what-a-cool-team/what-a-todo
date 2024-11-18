@@ -1,5 +1,5 @@
-use axum::{Extension, Json, Router};
 use axum::routing::{get, post};
+use axum::{Extension, Json, Router};
 use axum_valid::Valid;
 
 use domain::errors::ApiResult;

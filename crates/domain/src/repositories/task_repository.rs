@@ -1,9 +1,10 @@
 use std::sync::Arc;
+
+use crate::models::task::Task;
 use axum::async_trait;
 use chrono::Utc;
-use sqlx::{Pool, Postgres, query, Row};
 use sqlx::postgres::PgRow;
-use crate::models::task::Task;
+use sqlx::{query, Pool, Postgres, Row};
 
 pub type DynTaskRepository = Arc<dyn TaskRepository + Send + Sync>;
 
@@ -29,33 +30,40 @@ impl TaskRepository for DomainTaskRepository {
     async fn get_tasks(&self) -> anyhow::Result<Vec<Task>> {
         let tasks: Vec<Task> = query(
             "
+            WITH tags_array AS (
                 SELECT
-                    tasks.id,
-                    tasks.user_id,
-                    tasks.name,
-                    tasks.description,
-                    tasks.status,
-                    tasks.created_at,
-                    tasks.updated_at,
-                    COALESCE(array_agg(tags.name), ARRAY[]::VARCHAR[]) AS tags
-                FROM tasks
-                LEFT JOIN tasks_tags ON tasks.id = tasks_tags.task_id
-                LEFT JOIN tags ON tasks_tags.tag_id = tags.id
-                GROUP BY tasks.id
-                ORDER BY tasks.id
-            ")
-                .map(|row: PgRow| Task {
-                    id: row.get("id"),
-                    user_id: row.get("user_id"),
-                    name: row.get("name"),
-                    description: row.get("description"),
-                    status: row.get("status"),
-                    tags: row.get("tags"),
-                    created_at: row.get("created_at"),
-                    updated_at: row.get("updated_at"),
-                })
-                .fetch_all(&self.pool)
-                .await?;
+                    tt.task_id,
+                    COALESCE(ARRAY_AGG(tg.name), ARRAY[]::VARCHAR[]) AS tags
+                FROM tasks_tags AS tt
+                JOIN tags AS tg ON tt.tag_id=tg.id
+                GROUP BY tt.task_id
+            )
+
+            SELECT
+                t.id,
+                t.user_id,
+                t.name,
+                t.description,
+                t.status,
+                t.created_at,
+                t.updated_at,
+                ta.tags
+            FROM tasks AS t
+            LEFT JOIN tags_array AS ta ON t.id = ta.task_id
+            ",
+        )
+            .map(|row: PgRow| Task {
+                id: row.get("id"),
+                user_id: row.get("user_id"),
+                name: row.get("name"),
+                description: row.get("description"),
+                status: row.get("status"),
+                tags: row.get("tags"),
+                created_at: row.get("created_at"),
+                updated_at: row.get("updated_at"),
+            })
+            .fetch_all(&self.pool)
+            .await?;
         Ok(tasks)
     }
 
@@ -71,17 +79,15 @@ impl TaskRepository for DomainTaskRepository {
 
         let task_row = query(
             "
-            INSERT INTO tasks (id, user_id, name, description, status, created_at, updated_at)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            INSERT INTO tasks (user_id, name, description, status, created_at, updated_at)
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING *
             ",
         )
-            .bind(task.id)
             .bind(task.user_id)
             .bind(task.name)
             .bind(task.description)
             .bind(task.status)
-            .bind(now)
             .bind(now)
             .fetch_one(&mut *transaction)
             .await?;
@@ -95,7 +101,7 @@ impl TaskRepository for DomainTaskRepository {
                     INSERT INTO tags (name)
                     VALUES ($1)
                     RETURNING id
-                    "
+                    ",
                 )
                     .bind(tag_name)
                     .fetch_one(&mut *transaction)
@@ -107,7 +113,7 @@ impl TaskRepository for DomainTaskRepository {
                     "
                     INSERT INTO tasks_tags (task_id, tag_id)
                     VALUES ($1, $2)
-                    "
+                    ",
                 )
                     .bind(task_id)
                     .bind(tag_id)

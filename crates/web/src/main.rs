@@ -1,7 +1,7 @@
 mod app;
-pub mod router;
-mod pages;
 mod components;
+mod pages;
+pub mod router;
 
 fn main() {
     wasm_logger::init(wasm_logger::Config::default());

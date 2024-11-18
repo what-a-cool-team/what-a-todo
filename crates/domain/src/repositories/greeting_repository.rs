@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use axum::async_trait;
 use chrono::Utc;
-use sqlx::{Pool, Postgres, query, Row};
 use sqlx::postgres::PgRow;
+use sqlx::{query, Pool, Postgres, Row};
 
 use crate::models::greeting::Greeting;
 

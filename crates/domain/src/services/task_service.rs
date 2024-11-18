@@ -21,9 +21,7 @@ pub struct DomainTaskService {
 
 impl DomainTaskService {
     pub fn new(task_repository: DynTaskRepository) -> Self {
-        Self {
-            task_repository,
-        }
+        Self { task_repository }
     }
 }
 
@@ -34,9 +32,6 @@ impl TaskService for DomainTaskService {
     }
 
     async fn create_task(&self, task: Task) -> ApiResult<Task> {
-        Ok(self
-            .task_repository
-            .create_task(Task::from(task))
-            .await?)
+        Ok(self.task_repository.create_task(task).await?)
     }
 }

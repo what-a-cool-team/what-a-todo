@@ -1,12 +1,12 @@
 use axum::body::Body;
-use axum::http::{Method, Request, StatusCode};
 use axum::http::header::CONTENT_TYPE;
+use axum::http::{Method, Request, StatusCode};
 use axum::Router;
 use http_body_util::BodyExt;
 use mime::APPLICATION_JSON;
 use sqlx::postgres::PgPoolOptions;
-use testcontainers::ContainerAsync;
 use testcontainers::runners::AsyncRunner;
+use testcontainers::ContainerAsync;
 use testcontainers_modules::postgres::Postgres;
 use tower::{Service, ServiceExt};
 

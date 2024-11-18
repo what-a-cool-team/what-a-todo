@@ -1,8 +1,8 @@
-use config::{ConfigError};
 use anyhow::{Context, Result};
 use async_trait::async_trait;
-use tokio::io::{AsyncRead, AsyncReadExt};
+use config::ConfigError;
 use std::pin::Pin;
+use tokio::io::{AsyncRead, AsyncReadExt};
 
 #[async_trait]
 pub trait FileSystem: Send + Sync {
@@ -11,7 +11,9 @@ pub trait FileSystem: Send + Sync {
     async fn read(&self, path: &str) -> Result<Vec<u8>> {
         let mut file = self.open(path).await?;
         let mut buf = Vec::new();
-        file.read_to_end(&mut buf).await.with_context(|| format!("Failed to read from {}", path))?;
+        file.read_to_end(&mut buf)
+            .await
+            .with_context(|| format!("Failed to read from {}", path))?;
         Ok(buf)
     }
     async fn delete(&mut self, path: &str) -> Result<bool>;
@@ -41,8 +43,8 @@ impl FileSource {
     }
 }
 
-pub use self::local::LocalFileSystem;
 pub use self::in_memory::InMemoryFileSystem;
+pub use self::local::LocalFileSystem;
 
-mod local;
 mod in_memory;
+mod local;
