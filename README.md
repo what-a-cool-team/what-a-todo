@@ -46,6 +46,23 @@ development process.
 - [Rustup (Recommended)](https://www.rust-lang.org/tools/install)
 - [PostgreSQL](https://www.postgresql.org/download/)
 - [Docker](https://www.docker.com/)
+- [Trunk.io](https://trunk.io)
+
+## Setting up
+
+### Commands
+
+#### Database creation
+
+``` bash
+createdb dbname
+```
+
+#### Trunk install 
+
+```bash
+cargo install trunk
+```
 
 ## Usage
 
@@ -57,6 +74,11 @@ development process.
 cargo run --package app --bin app -- --config settings.toml
 ```
 
+#### Using Trunk
+
+```bash
+trunk serve
+```
 #### Using Docker
 
 ```bash
