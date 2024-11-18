@@ -10,5 +10,11 @@ axum = "0.7.5"
 thiserror = "1.0.63"
 serde = { version = "1.0.204", features = ["derive"] }
 sqlx = { version = "0.7.4", features = ["postgres", "runtime-tokio-rustls", "chrono"] }
+settings = { version = "0.1.0", path = "../settings" }
 anyhow = "1.0.86"
 chrono = { version = "0.4.38", features = ["serde"] }
+bcrypt = "0.12" 
+jwt = "0.16"
+hmac = "0.12"
+sha2 = "0.10"
+base64 = "0.13"

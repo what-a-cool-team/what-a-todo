@@ -10,6 +10,7 @@ use testcontainers::runners::AsyncRunner;
 use testcontainers_modules::postgres::Postgres;
 use tower::{Service, ServiceExt};
 
+use settings::settings::Settings;
 use api::models::requests::CreateGreetingRequest;
 use api::models::responses::{CreateGreetingResponse, GetGreetingsResponse};
 use api::routers::Api;
@@ -112,8 +113,18 @@ async fn new_api_context() -> ApiContext {
 
     sqlx::migrate!().run(&pool).await.unwrap();
 
+    let settings = Settings {
+        server: settings::settings::Server { port: 8080 },
+        database: settings::settings::Database {
+            connection_url: connection_url.to_string(),
+            max_connections: 1,
+            migrate_on_startup: false,
+        },
+        auth: settings::settings::Auth { jwk: "test-key".to_string() },
+    };
+
     ApiContext {
         container: node,
-        api: Api::new(ServiceRegistry::new(pool)),
+        api: Api::new(ServiceRegistry::new(pool, settings.clone())),
     }
 }
